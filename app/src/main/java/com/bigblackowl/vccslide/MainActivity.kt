@@ -2,21 +2,29 @@
 
 package com.bigblackowl.vccslide
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.content.Intent
-import android.view.View
-import android.widget.Button
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Bundle
+import android.provider.Settings
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.FrameLayout
-import android.view.Window
-import android.view.WindowManager
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import java.util.*
 
 class StartActivity : AppCompatActivity() {
@@ -50,10 +58,14 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_URL = "extra_url"
+        const val UPDATE_REQUEST_CODE = 100
     }
 
     private lateinit var mWebView: WebView
-    private var mTimer: Timer? = null
+    private lateinit var mTimer: Timer
+    private lateinit var appUpdateManager: AppUpdateManager
+    private lateinit var connectionLabel: TextView
+    private lateinit var networkSettingsButton: Button
 
     @SuppressLint("SetJavaScriptEnabled", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +75,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mWebView = findViewById(R.id.webView)
+        connectionLabel = findViewById(R.id.connectionLabel)
+        networkSettingsButton = findViewById(R.id.networkSettingsButton)
 
         mWebView.webViewClient = WebViewClient()
         mWebView.webChromeClient = MyChrome()
@@ -74,11 +88,44 @@ class MainActivity : AppCompatActivity() {
         if (url != null) {
             mWebView.loadUrl(url)
             mTimer = Timer()
-            mTimer?.schedule(object : TimerTask() {
+            mTimer.schedule(object : TimerTask() {
                 override fun run() {
                     mWebView.post { mWebView.reload() }
                 }
-            }, 0, 60 * 1000) // Reload every 60 seconds / 3600 hour
+            }, 0, 300 * 1000) // Reload every 60 seconds / 3600 hour
+
+            appUpdateManager = AppUpdateManagerFactory.create(this)
+            checkForAppUpdate()
+
+            if (!isConnected()) {
+                connectionLabel.visibility = View.VISIBLE
+                mWebView.visibility = View.GONE
+                networkSettingsButton.visibility = View.VISIBLE
+            } else {
+                connectionLabel.visibility = View.GONE
+                mWebView.visibility = View.VISIBLE
+                networkSettingsButton.visibility = View.GONE
+            }
+
+            networkSettingsButton.setOnClickListener {
+                openNetworkSettings()
+            }
+        }
+    }
+
+    private fun checkForAppUpdate() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    UPDATE_REQUEST_CODE
+                )
+            }
         }
     }
 
@@ -129,9 +176,51 @@ class MainActivity : AppCompatActivity() {
         mTimer = Timer()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mTimer?.cancel()
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    UPDATE_REQUEST_CODE
+                )
+            }
+        }
+        if (!isConnected()) {
+            connectionLabel.visibility = View.VISIBLE
+            mWebView.visibility = View.GONE
+            networkSettingsButton.visibility = View.VISIBLE
+        } else {
+            connectionLabel.visibility = View.GONE
+            mWebView.visibility = View.VISIBLE
+            networkSettingsButton.visibility = View.GONE
+        }
+    }
+
+    private fun isConnected(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+        return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+    }
+
+    private fun openNetworkSettings() {
+        val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
+        startActivity(intent)
+    }
+
+    @Deprecated("Deprecated in Java")
+    @SuppressLint("ObsoleteSdkInt")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                // Log the result if the update flow fails or is canceled
+                // You can handle the result here based on your requirements
+                return
+            }
+        }
     }
 }
-

@@ -3,4 +3,6 @@
     <string name="kyiv">Київ</string>
     <string name="khmelnytskyi">Хмельницький</string>
     <string name="changecity">Виберіть місто:</string>
+    <string name="no_internet_connection">Відсутнє інтернет підключення. Надайте інтернет-доступ та повторіть спробу.</string>
+    <string name="open_network_settings">Відкрити налаштування?</string>
 </resources>
