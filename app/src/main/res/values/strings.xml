@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VCC Slide</string>
+    <string name="kyiv">Київ</string>
+    <string name="khmelnytskyi">Хмельницький</string>
+    <string name="changecity">Виберіть місто:</string>
+
+</resources>

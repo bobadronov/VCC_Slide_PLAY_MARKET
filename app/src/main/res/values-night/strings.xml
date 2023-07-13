@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kyiv">Київ</string>
+    <string name="khmelnytskyi">Хмельницький</string>
+    <string name="changecity">Виберіть місто:</string>
+</resources>
