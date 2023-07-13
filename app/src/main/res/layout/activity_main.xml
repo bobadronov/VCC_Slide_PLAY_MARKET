@@ -1,12 +1,33 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/connectionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_internet_connection"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/networkSettingsButton"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:background="@drawable/button_background"
+        android:backgroundTint="@color/grey"
+        android:layout_marginBottom="80dp"
+        android:layout_gravity="bottom|center"
+        android:text="@string/open_network_settings"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        />
+
+</FrameLayout>
