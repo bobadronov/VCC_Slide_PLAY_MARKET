@@ -21,7 +21,7 @@
         android:id="@+id/networkSettingsButton"
         android:layout_width="300dp"
         android:layout_height="80dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/button_selector"
         android:backgroundTint="@color/grey"
         android:layout_marginBottom="80dp"
         android:layout_gravity="bottom|center"

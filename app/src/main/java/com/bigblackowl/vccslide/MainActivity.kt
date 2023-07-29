@@ -13,6 +13,7 @@ import android.provider.Settings
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -29,21 +30,36 @@ import java.util.*
 
 class StartActivity : AppCompatActivity() {
 
+    private lateinit var buttonKyiv: Button
+    private lateinit var buttonKhmelnytskyi: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_start)
 
-        val buttonKyiv: Button = findViewById(R.id.buttonKyiv)
+        buttonKyiv = findViewById(R.id.buttonKyiv) // Initialize the buttons
+        buttonKhmelnytskyi = findViewById(R.id.buttonKhmelnytskyi)
         buttonKyiv.setOnClickListener {
+            animateButtonClick(it)
             openMainActivity("https://docs.google.com/presentation/d/e/2PACX-1vTomhbyjW__8Kdo5DCKSCh1I4pj2iVKaCa2GqMe5sp_jSHGMHgGZLbEWKAm_n_Vk8YoIPyog44_7_bs/pub?start=true&loop=true&delayms=3000")
         }
 
-        val buttonKhmelnytskyi: Button = findViewById(R.id.buttonKhmelnytskyi)
         buttonKhmelnytskyi.setOnClickListener {
+            animateButtonClick(it)
             openMainActivity("https://docs.google.com/presentation/d/e/2PACX-1vRfOXaX-0p-TrUegHFq6WuOBcR-LChLs0XgAhbnuuKnHRkCtAyvSDZ1X2Ljxrnb_nHyzFfxE85vzp_Y/pub?start=true&loop=true&delayms=3000")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reset button scale to default (1.0) when returning to this activity
+
+    }
+    private fun animateButtonClick(view: View) {
+        val animation = AnimationUtils.loadAnimation(this@StartActivity, R.anim.button_scale)
+        view.startAnimation(animation)
     }
 
     private fun openMainActivity(url: String) {
@@ -92,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 override fun run() {
                     mWebView.post { mWebView.reload() }
                 }
-            }, 0, 300 * 1000) // Reload every 60 seconds / 3600 hour
+            }, 0, 300 * 1000) // Reload every 5 min
 
             appUpdateManager = AppUpdateManagerFactory.create(this)
             checkForAppUpdate()
