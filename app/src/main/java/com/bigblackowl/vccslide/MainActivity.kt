@@ -21,7 +21,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -80,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private inner class MyChrome : WebChromeClient() {
 
         private var mCustomView: View? = null
@@ -94,6 +92,7 @@ class MainActivity : AppCompatActivity() {
             }
             return BitmapFactory.decodeResource(applicationContext.resources, 2130837573)
         }
+
         override fun onHideCustomView() {
             (window.decorView as FrameLayout).removeView(mCustomView)
             mCustomView = null
@@ -102,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             mCustomViewCallback?.onCustomViewHidden()
             mCustomViewCallback = null
         }
+
         override fun onShowCustomView(paramView: View, paramCustomViewCallback: CustomViewCallback) {
             if (mCustomView != null) {
                 onHideCustomView()
@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mWebView.saveState(outState)
@@ -124,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         mTimer = Timer()
     }
+
     override fun onResume() {
         super.onResume()
         if (!isConnected()) {
@@ -134,25 +136,28 @@ class MainActivity : AppCompatActivity() {
             connectionLabel.visibility = View.GONE
             mWebView.visibility = View.VISIBLE
             networkSettingsButton.visibility = View.GONE
+
         }
     }
+
     private fun isConnected(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
         return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
+
     private fun openNetworkSettings() {
         val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
+
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
-        finishWithAnimation()
-    }
-    private fun finishWithAnimation() {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, findViewById(R.id.webView), "buttonTransition")
         val intent = Intent(this, StartActivity::class.java)
-        startActivity(intent, options.toBundle())
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/prime">
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
@@ -13,21 +13,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="@color/grey"
+        android:fontFamily="monospace"
         android:text="@string/no_internet_connection"
-        android:textSize="24sp"
+        android:textSize="20sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone" />
+
 
     <Button
         android:id="@+id/networkSettingsButton"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
+        android:layout_width="400dp"
+        android:layout_height="120dp"
         android:background="@drawable/button_selector"
-        android:backgroundTint="@color/grey"
-        android:layout_marginBottom="80dp"
         android:layout_gravity="bottom|center"
+        android:layout_marginBottom="130dp"
         android:text="@string/open_network_settings"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:visibility="gone" />
 
 </FrameLayout>

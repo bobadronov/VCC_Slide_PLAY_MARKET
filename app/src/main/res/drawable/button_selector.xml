@@ -2,14 +2,14 @@
     <!-- Default state -->
     <item android:state_pressed="false">
         <shape android:shape="rectangle">
-            <corners android:radius="25dp" /> <!-- Set the desired radius for rounded corners -->
-            <solid android:color="@android:color/white" />
+            <corners android:radius="15dp" /> <!-- Set the desired radius for rounded corners -->
+            <solid android:color="@color/grey" />
         </shape>
     </item>
     <!-- Pressed state -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="25dp" /> <!-- Set the desired radius for rounded corners -->
+            <corners android:radius="15dp" /> <!-- Set the desired radius for rounded corners -->
             <solid android:color="#283e2d" /> <!-- Change this color to the desired color when the button is pressed -->
         </shape>
     </item>
