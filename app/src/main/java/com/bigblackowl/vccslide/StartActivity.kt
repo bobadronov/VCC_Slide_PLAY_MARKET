@@ -1,14 +1,14 @@
 package com.bigblackowl.vccslide
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.KeyEvent
 import android.view.Window
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
@@ -21,13 +21,6 @@ class StartActivity : AppCompatActivity() {
     }
 
     private lateinit var appUpdateManager: AppUpdateManager
-    private var shouldPerformTransition = false
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        shouldPerformTransition = intent?.getBooleanExtra("performTransition", false) ?: false
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -36,23 +29,28 @@ class StartActivity : AppCompatActivity() {
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()
+
+        val buttonBrovary: Button = findViewById(R.id.buttonBrovary)
+        val buttonVyshneve: Button = findViewById(R.id.buttonVyshneve)
+        val buttonKyiv: Button = findViewById(R.id.buttonKyiv)
+        val buttonKhmelnytskyi: Button = findViewById(R.id.buttonKhmelnytskyi)
+        val buttonSettings: ImageButton = findViewById(R.id.buttonSettings)
+        buttonBrovary.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
+        buttonVyshneve.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
+        buttonKyiv.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
+        buttonKhmelnytskyi.setOnClickListener {openMainActivity(getString(R.string.url_khmelnytskyi))}
+        buttonSettings.setOnClickListener{openSetting()}
     }
 
-    fun onKyivButtonClick(view: View) {
-        animateButtonClick(view)
-        openMainActivityWithAnimation(view, "https://docs.google.com/presentation/d/e/2PACX-1vTomhbyjW__8Kdo5DCKSCh1I4pj2iVKaCa2GqMe5sp_jSHGMHgGZLbEWKAm_n_Vk8YoIPyog44_7_bs/pub?start=true&loop=true&delayms=3000")
+    private fun openSetting() {
+        val intent = Intent(this, SettingActivity::class.java)
+        startActivity(intent)
     }
 
-    fun onKhmelnytskyiButtonClick(view: View) {
-        animateButtonClick(view)
-        openMainActivityWithAnimation(view, "https://docs.google.com/presentation/d/e/2PACX-1vRfOXaX-0p-TrUegHFq6WuOBcR-LChLs0XgAhbnuuKnHRkCtAyvSDZ1X2Ljxrnb_nHyzFfxE85vzp_Y/pub?start=true&loop=true&delayms=3000")
-    }
-
-    private fun openMainActivityWithAnimation(view: View, url: String) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "buttonTransition")
+    private fun openMainActivity(url: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(MainActivity.EXTRA_URL, url)
-        startActivity(intent, options.toBundle())
+        startActivity(intent)
     }
 
     private fun checkForAppUpdate() {
@@ -73,10 +71,6 @@ class StartActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (shouldPerformTransition) {
-            val view: View? = findViewById(R.id.buttonKyiv) // Get the view of the clicked button
-            view?.let { startReverseTransition(it) }
-        }
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateManager.startUpdateFlowForResult(
@@ -89,13 +83,7 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    private fun animateButtonClick(view: View) {
-        val animation = AnimationUtils.loadAnimation(this@StartActivity, R.anim.button_scale)
-        view.startAnimation(animation)
-    }
-
     @Deprecated("Deprecated in Java")
-    @SuppressLint("ObsoleteSdkInt")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_REQUEST_CODE) {
@@ -105,5 +93,26 @@ class StartActivity : AppCompatActivity() {
                 return
             }
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showExitDialog()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    private fun showExitDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(getString(R.string.are_you_sure_you_want_to_exit))
+        builder.setCancelable(true)
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+            dialog.dismiss()
+            finishAffinity() // Close all activities and exit the app
+        }
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
     }
 }

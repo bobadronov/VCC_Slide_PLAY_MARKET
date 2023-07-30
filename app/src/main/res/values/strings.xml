@@ -1,9 +1,21 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">VCC Slide</string>
-    <string name="kyiv">Київ</string>
-    <string name="khmelnytskyi">Хмельницький</string>
+
     <string name="changecity">Виберіть місто:</string>
+
+    <string name="Brovary">Бровари</string>
+    <string name="Vyshneve">Вишневе</string>
+    <string name="Kyiv">Київ</string>
+    <string name="Khmelnytskyi">Хмельницький</string>
+
     <string name="no_internet_connection">Відсутнє інтернет підключення. Надайте інтернет-доступ та повторіть спробу.</string>
     <string name="open_network_settings">Відкрити налаштування?</string>
+    <string name="are_you_sure_you_want_to_exit">Ви впевнені що хочете вийти?</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+
+    <string name="url_kyiv" tools:ignore="Typos">https://docs.google.com/presentation/d/e/2PACX-1vTomhbyjW__8Kdo5DCKSCh1I4pj2iVKaCa2GqMe5sp_jSHGMHgGZLbEWKAm_n_Vk8YoIPyog44_7_bs/pub?start=true&amp;loop=true&amp;delayms=3000</string>
+    <string name="url_khmelnytskyi" tools:ignore="Typos">https://docs.google.com/presentation/d/e/2PACX-1vRfOXaX-0p-TrUegHFq6WuOBcR-LChLs0XgAhbnuuKnHRkCtAyvSDZ1X2Ljxrnb_nHyzFfxE85vzp_Y/pub?start=true&amp;loop=true&amp;delayms=3000</string>
+
 
 </resources>
