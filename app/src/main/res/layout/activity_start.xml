@@ -33,7 +33,10 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:background="@drawable/button_selector"
-        android:text="@string/kyiv" />
+        android:text="@string/kyiv"
+        android:onClick="onKyivButtonClick"
+        android:transitionName="buttonTransition"
+        />
 
     <Button
         android:id="@+id/buttonKhmelnytskyi"
@@ -43,6 +46,9 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:background="@drawable/button_selector"
-        android:text="@string/khmelnytskyi" />
+        android:text="@string/khmelnytskyi"
+        android:onClick="onKhmelnytskyiButtonClick"
+        android:transitionName="buttonTransition"
+        />
 
 </LinearLayout>

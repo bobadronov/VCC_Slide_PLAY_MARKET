@@ -10,7 +10,7 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="25dp" /> <!-- Set the desired radius for rounded corners -->
-            <solid android:color="#FF007F8F" /> <!-- Change this color to the desired color when the button is pressed -->
+            <solid android:color="#283e2d" /> <!-- Change this color to the desired color when the button is pressed -->
         </shape>
     </item>
 </selector>
