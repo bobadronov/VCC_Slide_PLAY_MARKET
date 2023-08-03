@@ -9,10 +9,10 @@
     tools:context=".StartActivity">
     <ImageView
         android:id="@+id/main_logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="260sp"
+        android:layout_height="260sp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50sp"
         android:background="@mipmap/main_logo_big"
         android:contentDescription="@string/app_name" />
     <TextView
@@ -20,16 +20,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15sp"
+        android:layout_marginBottom="10sp"
         android:fontFamily="monospace"
         android:text="@string/changecity"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/grey"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="277dp"
+        android:layout_width="400sp"
+        android:layout_height="250sp"
+        android:layout_gravity = "center"
         android:gravity="center">
 
         <!-- First Column -->
@@ -39,9 +40,9 @@
             android:orientation="vertical">
             <Button
                 android:id="@+id/buttonBrovary"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/Brovary"
@@ -49,9 +50,9 @@
                 android:textColor="@color/black" />
             <Button
                 android:id="@+id/buttonVyshneve"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/Vyshneve"
@@ -59,9 +60,9 @@
                 android:textColor="@color/black" />
             <Button
                 android:id="@+id/buttonKhmelnytskyi"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/Khmelnytskyi"
@@ -76,9 +77,9 @@
             android:orientation="vertical">
             <Button
                 android:id="@+id/buttonBorispol"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/borispol"
@@ -86,9 +87,9 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
             <Button
                 android:id="@+id/buttonKyiv"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/Kyiv"
@@ -96,9 +97,10 @@
                 android:textColor="@color/black" />
             <Button
                 android:id="@+id/buttonSoon"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
+                android:clickable="false"
+                android:layout_width="150sp"
+                android:layout_height="60sp"
+                android:layout_margin="10sp"
                 android:background="@drawable/button_selector"
                 android:fontFamily="@font/aclonica"
                 android:text="Незабаром відкриття :)"
@@ -107,5 +109,18 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonOurSite"
+        android:layout_width="320sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="30sp"
+        android:background="@drawable/site_button_selector"
+        android:fontFamily="@font/aclonica"
+        android:text="@string/site"
+        android:textSize="25sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black" />
 
 </LinearLayout>

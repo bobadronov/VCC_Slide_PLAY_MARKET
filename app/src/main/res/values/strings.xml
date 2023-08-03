@@ -17,6 +17,11 @@
     <string name="url_kyiv" tools:ignore="Typos">https://docs.google.com/presentation/d/e/2PACX-1vTomhbyjW__8Kdo5DCKSCh1I4pj2iVKaCa2GqMe5sp_jSHGMHgGZLbEWKAm_n_Vk8YoIPyog44_7_bs/pub?start=true&amp;loop=true&amp;delayms=3000</string>
     <string name="url_khmelnytskyi" tools:ignore="Typos">https://docs.google.com/presentation/d/e/2PACX-1vRfOXaX-0p-TrUegHFq6WuOBcR-LChLs0XgAhbnuuKnHRkCtAyvSDZ1X2Ljxrnb_nHyzFfxE85vzp_Y/pub?start=true&amp;loop=true&amp;delayms=3000</string>
     <string name="borispol">Бориспіль</string>
+    <string name="our_site">https://electro-tobacco.com/</string>
+    <string name="site">НАШ САЙТ</string>
+    <string name="press_back_again">Натисніть кнопку назад ще раз для виходу</string>
+    <string name="go_to_main">Повернутись до головного меню?</string>
+    <string name="show_message_on_start_site_view">Для виходу натисніть на екран та зачекайте, або натисніть назад.</string>
 
 
 </resources>

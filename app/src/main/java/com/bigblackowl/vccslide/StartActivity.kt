@@ -35,11 +35,16 @@ class StartActivity : AppCompatActivity() {
         val buttonKyiv: Button = findViewById(R.id.buttonKyiv)
         val buttonKhmelnytskyi: Button = findViewById(R.id.buttonKhmelnytskyi)
         val buttonBorispol: Button = findViewById(R.id.buttonBorispol)
+        val buttonOurSite: Button = findViewById(R.id.buttonOurSite)
+
         buttonBrovary.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
         buttonBorispol.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
         buttonVyshneve.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
         buttonKyiv.setOnClickListener {openMainActivity(getString(R.string.url_kyiv))}
         buttonKhmelnytskyi.setOnClickListener {openMainActivity(getString(R.string.url_khmelnytskyi))}
+
+        buttonOurSite.setOnClickListener {openSiteActivity(getString(R.string.our_site))}
+
         AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
         AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
     }
@@ -51,7 +56,12 @@ class StartActivity : AppCompatActivity() {
         startActivity(intent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
-
+    private fun openSiteActivity(url: String) {
+        val intent = Intent(this, SiteActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_URL, url)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
     private fun checkForAppUpdate() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
@@ -80,6 +90,7 @@ class StartActivity : AppCompatActivity() {
                 )
             }
         }
+
     }
 
     @Deprecated("Deprecated in Java")
