@@ -24,11 +24,11 @@
 
     <Button
         android:id="@+id/networkSettingsButton"
-        android:layout_width="300sp"
-        android:layout_height="120sp"
+        android:layout_width="400dp"
+        android:layout_height="120dp"
         android:background="@drawable/button_selector"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="100sp"
+        android:layout_marginBottom="130dp"
         android:text="@string/open_network_settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="20sp"

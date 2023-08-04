@@ -30,7 +30,7 @@
         android:layout_marginBottom="130dp"
         android:text="@string/open_network_settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:visibility="gone" />
 
