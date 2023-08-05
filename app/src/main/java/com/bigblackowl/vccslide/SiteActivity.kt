@@ -20,48 +20,52 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
 @Suppress("DEPRECATION")
-class SiteActivity : AppCompatActivity(){
+class SiteActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_URL = "extra_url"
     }
 
+    private lateinit var url: String
     private lateinit var mWebView: WebView
-    private lateinit var connectionLabel: TextView
     private lateinit var networkSettingsButton: Button
     private lateinit var goToMainButton: Button
     private lateinit var backgroundLayout: FrameLayout
 
-    private val BACK_PRESS_DELAY = 2000
+    private lateinit var chekInternet: LinearLayout
 
-    private var isBackPressed = false
+    private val backPressDelay = 1300
+    private var isBackPressed = true
     private val handler = Handler()
+
     @SuppressLint("SetJavaScriptEnabled", "MissingInflatedId", "ClickableViewAccessibility",
         "InflateParams"
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        isBackPressed = true
         window.requestFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_site)
 
         mWebView = findViewById(R.id.webView)
-        connectionLabel = findViewById(R.id.connectionLabel)
-        networkSettingsButton = findViewById(R.id.networkSettingsButton)
-        goToMainButton = findViewById(R.id.goToMainButton)
 
-        goToMainButton.setOnClickListener {openStartActivity()}
+        networkSettingsButton = findViewById(R.id.networkSettingsButton)
+        networkSettingsButton.setOnClickListener { openNetworkSettings() }
+
+        goToMainButton = findViewById(R.id.goToMainButton)
+        goToMainButton.setOnClickListener { openStartActivity() }
 
         backgroundLayout = findViewById(R.id.backgroundLayout)
-
+        chekInternet = findViewById(R.id.chek_internet)
 
         mWebView.webViewClient = WebViewClient()
         mWebView.webChromeClient = MyChrome()
@@ -69,46 +73,35 @@ class SiteActivity : AppCompatActivity(){
             goToMain()
             true
         }
-        if (isConnected()) {
-            backgroundLayout.setOnClickListener {
-                goToMainButton.visibility = View.GONE
-                mWebView.visibility = View.VISIBLE
-            }
+        backgroundLayout.setOnClickListener {
+            goToMainButton.visibility = View.GONE
+            mWebView.visibility = View.VISIBLE
         }
         val webSettings: WebSettings = mWebView.settings
         webSettings.javaScriptEnabled = true
         webSettings.allowFileAccess = true
         webSettings.javaScriptCanOpenWindowsAutomatically = true
 
-
-        val url = intent.getStringExtra(EXTRA_URL)
-        if (url != null) {
+        url = intent.getStringExtra(EXTRA_URL).toString()
+        if (!isConnected()) {
+            mWebView.visibility = View.GONE
+            chekInternet.visibility = View.VISIBLE
+        } else {
+            mWebView.visibility = View.VISIBLE
+            chekInternet.visibility = View.GONE
             mWebView.loadUrl(url)
-            if (!isConnected()) {
-                mWebView.visibility = View.GONE
-                connectionLabel.visibility = View.VISIBLE
-                networkSettingsButton.visibility = View.VISIBLE
-            } else {
-                mWebView.visibility = View.VISIBLE
-                connectionLabel.visibility = View.GONE
-                networkSettingsButton.visibility = View.GONE
-
-                val toastView = layoutInflater.inflate(R.layout.toast_layout, null)
-                val toastMessage = toastView.findViewById<TextView>(R.id.message)
-                toastMessage.text = getString(R.string.show_message_on_start_site_view)
-                val toast = Toast(applicationContext)
-                toast.duration = Toast.LENGTH_LONG
-                toast.view = toastView
-                toast.show()
-            }
-
-            networkSettingsButton.setOnClickListener {
-                openNetworkSettings()
-            }
+            mWebView.scrollTo(0, 0)
+            val toastView = layoutInflater.inflate(R.layout.toast_layout, null)
+            val toastMessage = toastView.findViewById<TextView>(R.id.message)
+            toastMessage.text = getString(R.string.show_message_on_start_site_view)
+            val toast = Toast(applicationContext)
+            toast.duration = Toast.LENGTH_LONG
+            toast.view = toastView
+            toast.show()
         }
     }
 
-    private fun openStartActivity(){
+    private fun openStartActivity() {
         val intent = Intent(this, StartActivity::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -166,12 +159,10 @@ class SiteActivity : AppCompatActivity(){
         super.onResume()
         if (!isConnected()) {
             mWebView.visibility = View.GONE
-            connectionLabel.visibility = View.VISIBLE
-            networkSettingsButton.visibility = View.VISIBLE
+            chekInternet.visibility = View.VISIBLE
         } else {
             mWebView.visibility = View.VISIBLE
-            connectionLabel.visibility = View.GONE
-            networkSettingsButton.visibility = View.GONE
+            chekInternet.visibility = View.GONE
             backgroundLayout.setOnClickListener {
                 goToMainButton.visibility = View.GONE
                 mWebView.visibility = View.VISIBLE
@@ -196,21 +187,17 @@ class SiteActivity : AppCompatActivity(){
     @SuppressLint("InflateParams")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (goToMainButton.visibility == View.VISIBLE) {
-            mWebView.visibility = View.VISIBLE
-            goToMainButton.visibility = View.GONE
-        } else if (mWebView.canGoBack()) {
+        if (mWebView.canGoBack()) {
             mWebView.goBack()
+            isBackPressed = true
         } else {
-            if (isBackPressed) {
-                super.onBackPressed()
+            mWebView.loadUrl(url)
+            if (goToMainButton.visibility == View.VISIBLE) {
+                mWebView.visibility = View.VISIBLE
+                goToMainButton.visibility = View.GONE
             } else {
-                isBackPressed = true
-
-                if (!isConnected()) {
-                    val intent = Intent(this, StartActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                if (!isBackPressed) {
+                    super.onBackPressed()
                 } else {
                     val toastView = layoutInflater.inflate(R.layout.toast_layout, null)
                     val toastMessage = toastView.findViewById<TextView>(R.id.message)
@@ -220,10 +207,9 @@ class SiteActivity : AppCompatActivity(){
                     toast.duration = Toast.LENGTH_SHORT
                     toast.view = toastView
                     toast.show()
-                    handler.postDelayed({ isBackPressed = false }, BACK_PRESS_DELAY.toLong())
+                    handler.postDelayed({ isBackPressed = false }, backPressDelay.toLong())
                 }
             }
         }
     }
-
 }

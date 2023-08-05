@@ -7,31 +7,45 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <TextView
-        android:id="@+id/connectionLabel"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/grey"
-        android:fontFamily="monospace"
-        android:text="@string/no_internet_connection"
-        android:textSize="20sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone" />
-
-
-    <Button
-        android:id="@+id/networkSettingsButton"
-        android:layout_width="400dp"
-        android:layout_height="120dp"
-        android:background="@drawable/button_selector"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="130dp"
-        android:text="@string/open_network_settings"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:visibility="gone" />
-
+        android:padding="20sp"
+        android:id="@+id/chek_internet"
+        android:orientation="vertical"
+        android:visibility="gone" >
+        <TextView
+            android:id="@+id/connectionLabel1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/grey"
+            android:fontFamily="monospace"
+            android:text="@string/no_internet_connection1"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/connectionLabel2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/grey"
+            android:fontFamily="monospace"
+            android:text="@string/no_internet_connection2"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Button
+            android:id="@+id/networkSettingsButton"
+            android:layout_width="200sp"
+            android:layout_height="100sp"
+            android:background="@drawable/button_selector"
+            android:layout_gravity="bottom|center"
+            android:layout_marginTop="50sp"
+            android:layout_marginBottom="150sp"
+            android:text="@string/open_network_settings"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+    </LinearLayout>
 </FrameLayout>

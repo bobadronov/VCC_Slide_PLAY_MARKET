@@ -19,11 +19,11 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
-@Suppress("DEPRECATION")
+@SuppressLint("SetJavaScriptEnabled")
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -32,54 +32,56 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mWebView: WebView
     private lateinit var mTimer: Timer
-
-    private lateinit var connectionLabel: TextView
     private lateinit var networkSettingsButton: Button
+    private val checkInternetLayout: LinearLayout by lazy { findViewById(R.id.chek_internet) }
 
-    @SuppressLint("SetJavaScriptEnabled", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
         setContentView(R.layout.activity_main)
 
-        mWebView = findViewById(R.id.webView)
-        connectionLabel = findViewById(R.id.connectionLabel)
-        networkSettingsButton = findViewById(R.id.networkSettingsButton)
+        initializeViews()
+        setupWebView()
 
+        val url = intent.getStringExtra(EXTRA_URL)
+        if (url != null) {
+            loadWebPage(url)
+            setupNetworkSettingsButton()
+        }
+    }
+
+    private fun initializeViews() {
+        mWebView = findViewById(R.id.webView)
+        networkSettingsButton = findViewById(R.id.networkSettingsButton)
+    }
+
+    private fun setupWebView() {
         mWebView.webViewClient = WebViewClient()
         mWebView.webChromeClient = MyChrome()
         val webSettings: WebSettings = mWebView.settings
         webSettings.javaScriptEnabled = true
         webSettings.allowFileAccess = true
-
-        val url = intent.getStringExtra(EXTRA_URL)
-        if (url != null) {
-            mWebView.loadUrl(url)
-            mTimer = Timer()
-            mTimer.schedule(object : TimerTask() {
-                override fun run() {
-                    mWebView.post { mWebView.reload() }
-                }
-            }, 0, 300 * 1000) // Reload every 5 min
-
-            if (!isConnected()) {
-                connectionLabel.visibility = View.VISIBLE
-                mWebView.visibility = View.GONE
-                networkSettingsButton.visibility = View.VISIBLE
-            } else {
-                connectionLabel.visibility = View.GONE
-                mWebView.visibility = View.VISIBLE
-                networkSettingsButton.visibility = View.GONE
-            }
-
-            networkSettingsButton.setOnClickListener {
-                openNetworkSettings()
-            }
-        }
     }
 
+    private fun loadWebPage(url: String) {
+        mWebView.loadUrl(url)
+        mTimer = Timer()
+        mTimer.schedule(object : TimerTask() {
+            override fun run() {
+                mWebView.post { mWebView.reload() }
+            }
+        }, 0, 300 * 1000) // Reload every 5 min
+    }
 
+    private fun setupNetworkSettingsButton() {
+        networkSettingsButton.setOnClickListener {
+            openNetworkSettings()
+        }
+    }
     private inner class MyChrome : WebChromeClient() {
 
         private var mCustomView: View? = null
@@ -129,20 +131,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!isConnected()) {
-            connectionLabel.visibility = View.VISIBLE
-            mWebView.visibility = View.GONE
-            networkSettingsButton.visibility = View.VISIBLE
-        } else {
-            connectionLabel.visibility = View.GONE
-            mWebView.visibility = View.VISIBLE
-            networkSettingsButton.visibility = View.GONE
+        val isConnected = isConnected()
+        checkInternetLayout.visibility = if (!isConnected) View.VISIBLE else View.GONE
+        mWebView.visibility = if (!isConnected) View.GONE else View.VISIBLE
+        if (isConnected) {
             mWebView.reload()
         }
     }
 
     private fun isConnected(): Boolean {
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
         return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true

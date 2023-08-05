@@ -8,7 +8,8 @@
     <string name="Khmelnytskyi">Хмельницький</string>
 
 
-    <string name="no_internet_connection">Відсутнє інтернет підключення. Надайте інтернет-доступ та повторіть спробу.</string>
+    <string name="no_internet_connection1">Відсутнє інтернет підключення.</string>
+    <string name="no_internet_connection2">Надайте інтернет-доступ та повторіть спробу.</string>
     <string name="open_network_settings">Відкрити налаштування?</string>
     <string name="are_you_sure_you_want_to_exit">Ви впевнені що хочете вийти?</string>
     <string name="yes">Так</string>
